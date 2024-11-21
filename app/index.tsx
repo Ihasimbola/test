@@ -2,6 +2,7 @@ import AppButton from "@/components/button/AppButton";
 import ProfileIcon from "@/components/icons/ProfileIcon";
 import { GetImage } from "@/components/images/Image";
 import Input from "@/components/input";
+import UserService from "@/service/userService";
 import { Link, useRouter } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -19,6 +20,15 @@ export default function Index() {
       ...prevState,
       [input]: text,
     }));
+  };
+
+  const handleLogin = async () => {
+    const res = await UserService.login(value);
+    if (res.status === 200) {
+      router.replace("/home/(tabs)");
+    } else {
+      alert("Invalid credentials, or need to sign up");
+    }
   };
 
   return (
@@ -52,10 +62,7 @@ export default function Index() {
           onChangeText={(text) => handleChangeText(text, "password")}
           value={value.password}
         />
-        <AppButton
-          title="Sign in"
-          onPress={() => router.replace("/home/(tabs)")}
-        />
+        <AppButton title="Sign in" onPress={handleLogin} />
         <Text style={{ color: "white" }}>
           Don't have an account?
           <Link style={{ color: "blue" }} href="/signup">

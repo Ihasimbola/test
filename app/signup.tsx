@@ -10,12 +10,14 @@ import { GetImage } from "@/components/images/Image";
 import Input from "@/components/input";
 import AppButton from "@/components/button/AppButton";
 import { useRouter } from "expo-router";
+import UserService from "@/service/userService";
+import { User } from "@/types/user";
 
 const SignInScreen = () => {
-  const [value, setValue] = React.useState({
+  const [value, setValue] = React.useState<Omit<User, "id">>({
     email: "",
     password: "",
-    fullname: "",
+    username: "",
     phone: "",
     pays: "",
     region: "",
@@ -28,6 +30,23 @@ const SignInScreen = () => {
       ...prevState,
       [input]: text,
     }));
+  };
+
+  const handleSignup = async () => {
+    try {
+      if (Object.values(value).every((val) => val === "")) {
+        alert("Please fill in all the fields");
+        return;
+      }
+
+      const response = await UserService.createUser(value);
+
+      if (response.status === 201) {
+        router.replace("/home/(tabs)");
+      }
+    } catch (error) {
+      console.error("An error occured:", error);
+    }
   };
 
   return (
@@ -52,8 +71,8 @@ const SignInScreen = () => {
         <Input
           placeholder="Full name"
           icon={"profile"}
-          value={value.fullname}
-          onChangeText={(text) => handleChangeText(text, "fullname")}
+          value={value.username}
+          onChangeText={(text) => handleChangeText(text, "username")}
         />
         <Input
           placeholder="Email"
@@ -86,10 +105,7 @@ const SignInScreen = () => {
           value={value.region}
           onChangeText={(text) => handleChangeText(text, "region")}
         />
-        <AppButton
-          title="Sign up"
-          onPress={() => router.replace("/home/(tabs)")}
-        />
+        <AppButton title="Sign up" onPress={handleSignup} />
       </View>
     </KeyboardAvoidingView>
   );
