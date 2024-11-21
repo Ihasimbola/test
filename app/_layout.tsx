@@ -7,6 +7,7 @@ export default function RootLayout() {
         headerStyle: {
           backgroundColor: "#f4511e",
         },
+        headerShown: false,
         headerTintColor: "#fff",
         headerTitleStyle: {
           fontWeight: "bold",

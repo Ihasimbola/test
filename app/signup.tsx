@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   signForm: {
     padding: 24,
     backgroundColor: "#617ded",
-    // flex: 1,
+    flex: 1,
     gap: 16,
     width: "100%",
     borderTopRightRadius: 16,
